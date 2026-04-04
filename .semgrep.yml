@@ -1,0 +1,52 @@
+# Intentionally vulnerable demo ruleset (local)
+# 목적: semgrep/gitleaks 스캔 파이프라인 데모용으로 "탐지"가 나오게 하는 최소 규칙.
+# 주의: 이 레포는 취약점 예시를 의도적으로 포함합니다.
+
+rules:
+  - id: demo.sql-injection
+    message: "Potential SQL injection: unsafe SQL string construction."
+    severity: ERROR
+    languages: [javascript]
+    pattern-regex: "SELECT\\s+\\*\\s+FROM[\\s\\S]{0,200}WHERE[\\s\\S]{0,200}(\\$\\{|\\+\\s*[a-zA-Z_][a-zA-Z0-9_]*|\\$\\{)"
+
+  - id: demo.reflected-xss
+    message: "Potential reflected XSS: unescaped input reflected into HTML."
+    severity: ERROR
+    languages: [javascript]
+    pattern-regex: "\\.type\\(['\"]html['\"]\\)[\\s\\S]{0,200}\\.send\\([\\s\\S]{0,400}\\$\\{[\\s\\S]{0,200}\\}"
+
+  - id: demo.path-traversal
+    message: "Potential path traversal: user-controlled path used with fs read."
+    severity: ERROR
+    languages: [javascript]
+    pattern-regex: "path\\.join\\([\\s\\S]{0,200}req\\.query\\.[a-zA-Z0-9_]+[\\s\\S]{0,200}\\)[\\s\\S]{0,300}readFileSync\\("
+
+  - id: demo.command-injection
+    message: "Potential command injection: user input reaches child_process exec/execSync."
+    severity: ERROR
+    languages: [javascript]
+    pattern-regex: "\\bexec(?:Sync)?\\s*\\([\\s\\S]{0,200}req\\.(query|body)[\\s\\S]{0,200}\\)"
+
+  - id: demo.insecure-deserialization
+    message: "Potential insecure deserialization: unserialize called on untrusted input."
+    severity: ERROR
+    languages: [javascript]
+    pattern-regex: "\\bunserialize\\s*\\([\\s\\S]{0,200}req\\.(query|body)[\\s\\S]{0,200}\\)"
+
+  - id: demo.hardcoded-secret
+    message: "Hardcoded secret-like value detected (intentionally seeded for demo)."
+    severity: ERROR
+    languages: [javascript]
+    pattern-regex: "\\b\\w*(api[_-]?key|secret|token|password)\\w*\\s*[:=]\\s*['\"][^'\"\\r\\n]{12,}['\"]"
+
+  - id: demo.open-redirect
+    message: "Potential open redirect: user-controlled URL passed to res.redirect/location."
+    severity: ERROR
+    languages: [javascript]
+    pattern-regex: "\\bres\\.(redirect|location)\\s*\\([\\s\\S]{0,200}req\\.(query|body)[\\s\\S]{0,200}\\)"
+
+  - id: demo.weak-crypto-md5
+    message: "Weak crypto: MD5 hash used (demo)."
+    severity: ERROR
+    languages: [javascript]
+    pattern-regex: "createHash\\s*\\(\\s*['\"]md5['\"]\\s*\\)[\\s\\S]{0,200}req\\.(query|body)"

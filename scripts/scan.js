@@ -43,19 +43,19 @@ function scanFile(filePath, relPath, text) {
 	// Heuristic patterns intentionally tuned to this demo code.
 	const rules = [
 		{
-			id: 'SQL_INJECTION_STRING_CONCAT',
+			id: 'SQL_INJECTION',
 			severity: 'high',
 			description: 'Unsafe SQL query construction via string interpolation/concatenation.',
-			regex: /SELECT\s+\*\s+FROM[\s\S]{0,200}WHERE[\s\S]{0,200}\$\{[\s\S]{0,200}\}/i,
+			regex: /SELECT\s+\*\s+FROM[\s\S]{0,200}WHERE[\s\S]{0,200}(\$\{|'\s*\+\s*\w+|"\s*\+\s*\w+)/i,
 		},
 		{
-			id: 'REFLECTED_XSS_UNESCAPED',
+			id: 'XSS',
 			severity: 'high',
 			description: 'Unescaped user input reflected into HTML response.',
 			regex: /type\(['"]html['"]\)[\s\S]{0,200}send\([\s\S]{0,400}\$\{[\s\S]{0,200}\}\)/i,
 		},
 		{
-			id: 'DIR_TRAVERSAL_PATH_JOIN',
+			id: 'PATH_TRAVERSAL',
 			severity: 'high',
 			description: 'Path built from user input without validation/allowlist, then read from disk.',
 			regex: /const\s+userPath\s*=\s*String\(req\.query\.[^)]*\)[\s\S]{0,300}path\.join\([^\)]*userPath[^\)]*\)[\s\S]{0,300}readFileSync\(/i,
@@ -65,6 +65,36 @@ function scanFile(filePath, relPath, text) {
 			severity: 'high',
 			description: 'File upload writes user-supplied filename/content without validation.',
 			regex: /const\s+filename\s*=\s*String\(req\.query\.filename[\s\S]{0,400}writeFileSync\(/i,
+		},
+		{
+			id: 'COMMAND_INJECTION',
+			severity: 'high',
+			description: 'User input reaches OS command execution (child_process exec/execSync).',
+			regex: /\bexec(?:Sync)?\s*\([\s\S]{0,200}req\.(query|body)[\s\S]{0,200}\)/i,
+		},
+		{
+			id: 'INSECURE_DESERIALIZATION',
+			severity: 'high',
+			description: 'Untrusted input is deserialized (e.g., node-serialize unserialize).',
+			regex: /\bunserialize\s*\([\s\S]{0,200}req\.(query|body)[\s\S]{0,200}\)/i,
+		},
+		{
+			id: 'HARDCODED_SECRET',
+			severity: 'high',
+			description: 'Hardcoded secret-like value in source (intentionally seeded for demo).',
+			regex: /\b\w*(api[_-]?key|secret|token|password)\w*\s*[:=]\s*['"][^'"\r\n]{12,}['"]/i,
+		},
+		{
+			id: 'OPEN_REDIRECT',
+			severity: 'high',
+			description: 'User-controlled redirect target (potential open redirect).',
+			regex: /\bres\.(redirect|location)\s*\([\s\S]{0,200}req\.(query|body)[\s\S]{0,200}\)/i,
+		},
+		{
+			id: 'WEAK_CRYPTO_MD5',
+			severity: 'high',
+			description: 'Weak cryptography: MD5 hash used (not suitable for passwords/integrity).',
+			regex: /createHash\s*\(\s*['"]md5['"]\s*\)[\s\S]{0,200}req\.(query|body)/i,
 		},
 	];
 
@@ -82,7 +112,8 @@ function scanFile(filePath, relPath, text) {
 		}
 	}
 
-	// Avoid suggesting secrets: we intentionally do NOT scan/seed hardcoded secrets here.
+	// NOTE: This demo now includes an intentionally-seeded hardcoded-secret heuristic.
+	// The scanner prints only finding locations, not the secret values.
 
 	return findings;
 }
