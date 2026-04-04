@@ -1,0 +1,20 @@
+{
+  "name": "workspace-js",
+  "version": "0.1.0",
+  "private": true,
+  "description": "JavaScript (Express) demo with tests and intentionally vulnerable examples",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js",
+    "test": "node --test",
+    "build": "node scripts/build.js",
+    "scan": "node scripts/scan.js"
+  },
+  "dependencies": {
+    "express": "4.19.2"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

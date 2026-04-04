@@ -1,0 +1,23 @@
+# dependencies
+node_modules/
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# env
+.env
+
+# build output (optional)
+dist/
+build/
+
+# uploaded files (demo runtime artifacts)
+public/uploads/*
+!public/uploads/.gitkeep
+
+# OS / editor
+.DS_Store
+.vscode/

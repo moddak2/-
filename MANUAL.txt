@@ -1,0 +1,27 @@
+[실행(메인) 파일 안내]
+
+1) 자바스크립트 실행(엔트리 포인트)
+- 메인 실행 파일: index.js
+- npm start를 실행하면 index.js가 실행됩니다.
+
+2) index.js와 server.js 관계
+- index.js는 서버 실행을 위해 src/server.js의 main()을 호출합니다.
+- src/server.js는 서버를 실제로 띄우는 파일이며, 단독으로도 실행 가능합니다.
+
+[실행 방법]
+
+A) npm으로 실행(권장)
+- npm start
+
+B) node로 직접 실행
+- node index.js
+
+C) 포트 변경(기본 3000)
+- node index.js --port 3001
+
+[관련 파일]
+- index.js: 실행 엔트리
+- src/server.js: 서버 시작(main), 포트 파싱
+- src/app.js: Express 앱 구성/라우트 연결
+
+하드코딩은 비추천하여 아직 진행하지않았음.
