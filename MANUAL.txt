@@ -25,3 +25,33 @@ C) 포트 변경(기본 3000)
 - src/app.js: Express 앱 구성/라우트 연결
 
 하드코딩은 비추천하여 아직 진행하지않았음.
+
+
+[주의 사항 (의도적 취약점 데모)]
+
+- 이 프로젝트에는 “스캔 데모를 위한 의도적 취약점 코드”가 포함되어 있습니다.
+- 특히 src/vuln_samples/ 아래 파일들은 “스캔 전용(fixture)”이며 앱 실행 경로(라우팅/require)에 연결하지 않습니다.
+- 실서비스/과제 제출용 안전 코드로 사용하면 안 됩니다. 스캐너(Semgrep/Gitleaks/로컬 스캔)에 탐지되는 것이 정상입니다.
+- 하드코딩 시크릿은 실제 키가 아닌 데모용 문자열이지만, 저장소에 올리면 정책/스캐너에 의해 탐지될 수 있습니다.
+
+
+[취약점 스캔 방법]
+
+1) 로컬 데모 스캐너(이 레포 제공)
+- 스캔 대상: src/ 이하의 .js 파일 전체(= src/vuln_samples 포함)
+- 실행(권장): node scripts/scan.js
+	- PowerShell에서 npm 실행 정책 문제 발생 시에도 위 명령은 동작합니다.
+- 기대 결과: Findings: 20 (사진의 6개 항목 포함 + 추가 항목)
+
+2) Semgrep (로컬 룰 사용)
+- 룰 파일: .semgrep.yml
+- 예시 실행: semgrep --config .semgrep.yml
+
+3) Gitleaks
+- 예시 실행: gitleaks detect --source .
+
+
+[서버 실행 방법(참고)]
+
+- 서버 실행은 취약점 스캔과 별개입니다.
+- 실행: npm start (또는 node index.js)
