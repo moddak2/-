@@ -1,0 +1,35 @@
+# Local gitleaks config for demo (PII + generic hardcoded secrets)
+# 목적: 테스트용 "가짜" 민감정보 문자열도 gitleaks에서 쉽게 탐지되도록 함.
+# 주의: 이 레포는 의도적으로 취약한 샘플을 포함합니다.
+
+title = "demo-gitleaks-config"
+
+[[rules]]
+id = "demo-hardcoded-password"
+description = "Hardcoded password-like value (demo)"
+regex = "(?i)\\b(password|passwd|pwd)\\b\\s*[:=]\\s*['\"][^'\"\\r\\n]{8,}['\"]"
+tags = ["demo", "secret"]
+
+[[rules]]
+id = "demo-hardcoded-api-key"
+description = "Hardcoded API key/token fields (demo)"
+regex = "(?i)\\b(aws_access_key_id|api_key|secret_token|gcp_key|jwt_secret|api_token)\\b\\s*[:=]\\s*['\"][^'\"\\r\\n]{8,}['\"]"
+tags = ["demo", "secret"]
+
+[[rules]]
+id = "demo-korean-rrn"
+description = "Korean RRN-like pattern (demo / may be invalid)"
+regex = "\\b\\d{6}-\\d{7}\\b"
+tags = ["demo", "pii"]
+
+[[rules]]
+id = "demo-korean-phone"
+description = "Korean phone number-like pattern (demo)"
+regex = "\\b01[016789]-\\d{3,4}-\\d{4}\\b|\\b01[016789]\\d{7,8}\\b"
+tags = ["demo", "pii"]
+
+[[rules]]
+id = "demo-email"
+description = "Email address pattern (demo)"
+regex = "\\b[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}\\b"
+tags = ["demo", "pii"]

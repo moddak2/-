@@ -82,7 +82,7 @@ function scanFile(filePath, relPath, text) {
 			id: 'HARDCODED_SECRET',
 			severity: 'high',
 			description: 'Hardcoded secret-like value in source (intentionally seeded for demo).',
-			regex: /\b\w*(api[_-]?key|secret|token|password)\w*\s*[:=]\s*['"][^'"\r\n]{12,}['"]/i,
+			regex: /\b\w*(aws[_-]?access[_-]?key[_-]?id|gcp[_-]?key|api[_-]?key|secret[_-]?token|api[_-]?token|jwt[_-]?secret|db[_-]?password|secret[_-]?key|password|rrn|resident|ssn|phone|tel|email|user[_-]?id)\w*\s*[:=]\s*['"][^'"\r\n]{8,}['"]/i,
 		},
 		{
 			id: 'OPEN_REDIRECT',

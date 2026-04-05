@@ -49,9 +49,34 @@ C) 포트 변경(기본 3000)
 
 3) Gitleaks
 - 예시 실행: gitleaks detect --source .
+- (PII/데모 패턴까지 더 강하게 탐지하려면) gitleaks detect --config .gitleaks.toml --source .
 
 
 [서버 실행 방법(참고)]
 
 - 서버 실행은 취약점 스캔과 별개입니다.
 - 실행: npm start (또는 node index.js)
+
+
+[자바스크립트 취약점 구성 요약]
+
+- 이 레포는 의도적으로 취약한 예시를 포함합니다.
+- 실제로 서버 라우트로 연결되어 동작하는 취약점 예시:
+	- SQL Injection: src/routes/index.js (/sql)
+	- XSS: src/routes/index.js (/xss)
+	- Path Traversal: src/routes/index.js (/read)
+	- Insecure File Upload: src/routes/upload.js (/upload)
+
+- 스캔 전용(fixture) 파일에만 존재하는 취약점 예시(앱 실행 경로에 연결하지 않음):
+	- Command Injection: src/vuln_samples/intentionally_vulnerable_demo.js, src/vuln_samples/more_intentionally_vulnerable_demo.js
+	- Insecure Deserialization: src/vuln_samples/intentionally_vulnerable_demo.js, src/vuln_samples/more_intentionally_vulnerable_demo.js
+	- Hardcoded Secret / Hardcoded Sensitive Data(비밀번호/전화번호/주민번호 형태/이메일/아이디 등):
+		- src/vuln_samples/intentionally_vulnerable_demo.js
+		- src/vuln_samples/hardcoded_sensitive_demo.js
+		- src/vuln_samples/more_intentionally_vulnerable_demo.js
+	- Open Redirect: src/vuln_samples/extra_intentionally_vulnerable_demo.js
+	- Weak Crypto (MD5): src/vuln_samples/extra_intentionally_vulnerable_demo.js
+
+- 로컬 데모 스캐너 기준 현재 파인딩 수:
+	- node scripts/scan.js 실행 시 Findings: 32
+	- (룰/샘플 변경에 따라 숫자는 달라질 수 있음)

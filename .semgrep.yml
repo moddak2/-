@@ -37,7 +37,7 @@ rules:
     message: "Hardcoded secret-like value detected (intentionally seeded for demo)."
     severity: ERROR
     languages: [javascript]
-    pattern-regex: "\\b\\w*(api[_-]?key|secret|token|password)\\w*\\s*[:=]\\s*['\"][^'\"\\r\\n]{12,}['\"]"
+    pattern-regex: "\\b\\w*(aws[_-]?access[_-]?key[_-]?id|gcp[_-]?key|api[_-]?key|secret[_-]?token|api[_-]?token|jwt[_-]?secret|db[_-]?password|secret[_-]?key|password|rrn|resident|ssn|phone|tel|email|user[_-]?id)\\w*\\s*[:=]\\s*['\"][^'\"\\r\\n]{8,}['\"]"
 
   - id: demo.open-redirect
     message: "Potential open redirect: user-controlled URL passed to res.redirect/location."
